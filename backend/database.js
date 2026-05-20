@@ -1,7 +1,11 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const os = require('os');
 
-const dbPath = path.join(__dirname, 'shopnova.db');
+// When running on Vercel serverless runtime, use the temporary directory
+// for the SQLite database to avoid permission issues and keep functions fast.
+const isVercel = !!process.env.VERCEL;
+const dbPath = isVercel ? path.join(os.tmpdir(), 'shopnova.db') : path.join(__dirname, 'shopnova.db');
 const db = new sqlite3.Database(dbPath);
 
 const runAsync = (sql, params = []) =>
@@ -184,7 +188,7 @@ const seedDatabase = () => {
         { name: 'Smart Watch Pro', description: 'Advanced fitness tracking and notifications', price: 449.99, sale_price: 349.99, category_id: 1, rating: 4.7, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400' },
         { name: 'Portable Bluetooth Speaker', description: '360° surround sound, waterproof', price: 129.99, sale_price: 89.99, category_id: 1, rating: 4.6, image: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400' },
         { name: '4K Ultra HD Webcam', description: 'Crystal clear video for streaming', price: 179.99, sale_price: 129.99, category_id: 1, rating: 4.5, image: 'https://images.unsplash.com/photo-1587826080692-f439cd0b70da?w=400' },
-        
+
         // Fashion
         { name: 'Classic Leather Jacket', description: 'Genuine leather, timeless design', price: 399.99, sale_price: 299.99, category_id: 2, rating: 4.9, image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400' },
         { name: 'Designer Sunglasses', description: 'UV400 protection, premium frames', price: 199.99, sale_price: 149.99, category_id: 2, rating: 4.7, image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400' },
